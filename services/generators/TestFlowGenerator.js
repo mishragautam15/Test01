@@ -1,41 +1,54 @@
 class TestFlowGenerator {
 
-    generate(locatorMetadata) {
+    generate(
+        testCase,
+        locatorMetadata
+    ) {
 
         const actions = [];
 
-        for (const flow of locatorMetadata.testFlow) {
+        const methods =
+            locatorMetadata.controls
+                .map(
+                    control =>
+                        control.suggestedMethod
+                );
+
+        for (
+            const method of methods
+        ) {
 
             if (
-                flow.method ===
+                method ===
                 "enterUsername"
             ) {
 
                 actions.push(
-                    `await loginPage.enterUsername(
+`await loginPage.enterUsername(
     credentials.candidate.username
 );`
                 );
+
+                continue;
             }
 
-            else if (
-                flow.method ===
+            if (
+                method ===
                 "enterPassword"
             ) {
 
                 actions.push(
-                    `await loginPage.enterPassword(
+`await loginPage.enterPassword(
     credentials.candidate.password
 );`
                 );
+
+                continue;
             }
 
-            else {
-
-                actions.push(
-                    `await loginPage.${flow.method}();`
-                );
-            }
+            actions.push(
+                `await loginPage.${method}();`
+            );
         }
 
         return actions;

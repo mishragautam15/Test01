@@ -147,6 +147,7 @@ generated/mcp/TC${testCase.id}_Locators.json`
         const actions =
             this.testFlowGenerator
                 .generate(
+                    testCase,
                     locatorMetadata
                 );
 
