@@ -1,5 +1,5 @@
 const ConfigService =
-    require("../services/ConfigService");
+    require("../../services/ConfigService");
 
 const config =
     new ConfigService();

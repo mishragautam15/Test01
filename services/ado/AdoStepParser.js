@@ -12,9 +12,13 @@ class AdoStepParser {
 
         const result =
             parser.parse(xmlSteps);
-
+       
         const rawSteps =
-            result.steps.step;
+            Array.isArray(
+                result.steps.step
+            )
+                ? result.steps.step
+                : [result.steps.step];
 
         return rawSteps.map(step => ({
 

@@ -50,6 +50,21 @@ class PageObjectGenerator {
     }`;
                     }
 
+                    if (
+                        control.suggestedMethod
+                            .startsWith("verify")
+                    ) {
+
+                        return `
+    async ${control.suggestedMethod}() {
+
+        await this.${propertyName}
+            .waitFor({
+                state: 'visible'
+            });
+    }`;
+                    }
+
                     return `
     async ${control.suggestedMethod}() {
 
@@ -60,12 +75,33 @@ class PageObjectGenerator {
                 .join("\n");
 
         return `
+const ConfigService =
+    require('../../services/ConfigService');
+
 class LoginPage {
 
     constructor(page) {
 
         this.page = page;
+
+        this.configService =
+            new ConfigService();
 ${locatorDefinitions}
+    }
+
+    async open() {
+
+        const environment =
+            this.configService
+                .getEnvironment();
+
+        await this.page.goto(
+            environment.baseUrl
+        );
+
+        await this.page.waitForLoadState(
+            'networkidle'
+        );
     }
 
 ${methods}

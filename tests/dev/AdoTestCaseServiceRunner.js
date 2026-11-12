@@ -1,5 +1,5 @@
 const AdoTestCaseService =
-    require("../services/ado/AdoTestCaseService");
+    require("../../services/ado/AdoTestCaseService");
 
 (async () => {
 

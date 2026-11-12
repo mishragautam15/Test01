@@ -1,15 +1,29 @@
 const AutomationEngine =
     require("../services/AutomationEngine");
 
+const ConfigService =
+    require("../services/ConfigService");
+
 (async () => {
 
-    const testCaseId =
+    const configService =
+        new ConfigService();
+
+    const environment =
+        configService
+            .getEnvironment();
+
+    const commandLineTestCaseId =
         process.argv[2];
+
+    const testCaseId =
+        commandLineTestCaseId ||
+        environment.testCaseId;
 
     if (!testCaseId) {
 
         throw new Error(
-            "Please provide a Test Case ID"
+            "No Test Case ID configured."
         );
     }
 
@@ -21,8 +35,81 @@ const AutomationEngine =
             testCaseId
         );
 
+    if (
+        result.status ===
+        "VALIDATION_FAILED"
+    ) {
+
+        console.log("\n");
+
+        console.log(
+            "===================================="
+        );
+
+        console.log(
+            `Test Case: ${result.testCaseId}`
+        );
+
+        console.log(
+            "Validation Failed"
+        );
+
+        result.errors.forEach(
+            error =>
+                console.log(
+                    `- ${error}`
+                )
+        );
+
+        console.log(
+            "===================================="
+        );
+
+        return;
+    }
+
+    if (
+        result.status ===
+        "WAITING_FOR_MCP"
+    ) {
+
+        console.log("\n");
+
+        console.log(
+            "===================================="
+        );
+
+        console.log(
+            `Test Case: ${result.testCaseId}`
+        );
+
+        console.log(
+            `Title: ${result.title}`
+        );
+
+        console.log(
+            result.message
+        );
+
+        console.log(
+            `Prompt Generated: ${result.promptPath}`
+        );
+
+        console.log(
+            "===================================="
+        );
+
+        process.exit(100);
+
+        return;
+    }
+
     console.log(
-        "Spec:"
+        `Test Case ID: ${testCaseId}`
+    );
+
+    console.log(
+        "\nSpec:"
     );
 
     console.log(
@@ -30,7 +117,7 @@ const AutomationEngine =
     );
 
     console.log(
-        "Prompt:"
+        "\nPrompt:"
     );
 
     console.log(

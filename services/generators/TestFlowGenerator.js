@@ -12,8 +12,20 @@ class TestFlowGenerator {
             ) {
 
                 actions.push(
-                    `await loginPage.${flow.method}(
+                    `await loginPage.enterUsername(
     credentials.candidate.username
+);`
+                );
+            }
+
+            else if (
+                flow.method ===
+                "enterPassword"
+            ) {
+
+                actions.push(
+                    `await loginPage.enterPassword(
+    credentials.candidate.password
 );`
                 );
             }

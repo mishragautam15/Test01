@@ -16,6 +16,14 @@ const MCPDiscoveryResultParser =
 const TestFlowGenerator =
     require("./generators/TestFlowGenerator");
 
+const TestCaseValidator =
+    require("./validators/TestCaseValidator");
+
+const PageObjectGenerator =
+    require(
+        "./generators/PageObjectGenerator"
+    );
+
 class AutomationEngine {
 
     constructor() {
@@ -37,6 +45,13 @@ class AutomationEngine {
 
         this.testFlowGenerator =
             new TestFlowGenerator();
+
+        this.validator =
+            new TestCaseValidator();
+
+        this.pageObjectGenerator =
+            new PageObjectGenerator();
+
     }
 
     async generate(testCaseId) {
@@ -46,6 +61,28 @@ class AutomationEngine {
                 .getTestCase(
                     testCaseId
                 );
+
+        const validation =
+            this.validator
+                .validate(
+                    testCase
+                );
+
+        if (
+            !validation.isValid
+        ) {
+
+            return {
+
+                status:
+                    "VALIDATION_FAILED",
+
+                testCaseId,
+
+                errors:
+                    validation.errors
+            };
+        }
 
         const mcpPrompt =
             this.mcpPromptBuilder
@@ -62,11 +99,49 @@ class AutomationEngine {
                     `TC${testCase.id}_MCPPrompt.txt`
                 );
 
-        const locatorMetadata =
-            this.mcpParser
-                .parse(
+        let locatorMetadata;
 
-                    `./generated/mcp/TC${testCase.id}_Locators.json`
+        try {
+
+            locatorMetadata =
+                this.mcpParser
+                    .parse(
+                        `./generated/mcp/TC${testCase.id}_Locators.json`
+                    );
+
+        } catch (error) {
+
+            return {
+
+                status:
+                    "WAITING_FOR_MCP",
+
+                promptPath,
+
+                testCaseId:
+                    testCase.id,
+
+                title:
+                    testCase.title,
+
+                message:
+                    `MCP metadata not found for TC${testCase.id}.
+Generate MCP analysis and save the result as:
+generated/mcp/TC${testCase.id}_Locators.json`
+            };
+        }
+
+        const pageObject =
+            this.pageObjectGenerator
+                .generate(
+                    locatorMetadata
+                );
+
+        const pageObjectPath =
+            this.pageObjectGenerator
+                .save(
+                    pageObject,
+                    "LoginPage.js"
                 );
 
         const actions =
@@ -104,7 +179,8 @@ class AutomationEngine {
 
         return {
             specPath,
-            promptPath
+            promptPath,
+            pageObjectPath
         };
     }
 }

@@ -1,4 +1,5 @@
 {
   "baseUrl": "https://qa.candidate.lhh.com/",
-  "environment": "QA"
+  "environment": "QA",
+  "testCaseId": 306398
 }

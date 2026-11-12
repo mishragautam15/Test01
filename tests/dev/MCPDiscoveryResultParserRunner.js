@@ -1,6 +1,6 @@
 const MCPDiscoveryResultParser =
     require(
-        "../services/mcp/MCPDiscoveryResultParser"
+        "../../services/mcp/MCPDiscoveryResultParser"
     );
 
 const parser =

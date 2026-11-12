@@ -1,8 +1,8 @@
 const AdoClient =
-    require("../services/ado/AdoClient");
+    require("../../services/ado/AdoClient");
 
 const AdoStepParser =
-    require("../services/ado/AdoStepParser");
+    require("../../services/ado/AdoStepParser");
 
 (async () => {
 

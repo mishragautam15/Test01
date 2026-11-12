@@ -8,7 +8,7 @@ class SpecGenerator {
         return `
 const { test } = require('@playwright/test');
 const LoginPage = require('../pages/LoginPage');
-const ConfigService = require('../services/ConfigService');
+const ConfigService = require('../../services/ConfigService');
 
 const config =
     new ConfigService();

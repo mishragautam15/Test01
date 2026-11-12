@@ -1,11 +1,11 @@
 const MCPDiscoveryResultParser =
     require(
-        "../services/mcp/MCPDiscoveryResultParser"
+        "../../services/mcp/MCPDiscoveryResultParser"
     );
 
 const TestFlowGenerator =
     require(
-        "../services/generators/TestFlowGenerator"
+        "../../services/generators/TestFlowGenerator"
     );
 
 const parser =

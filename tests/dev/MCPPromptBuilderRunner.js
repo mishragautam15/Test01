@@ -1,8 +1,8 @@
 const AdoTestCaseService =
-    require("../services/ado/AdoTestCaseService");
+    require("../../services/ado/AdoTestCaseService");
 
 const MCPPromptBuilder =
-    require("../services/mcp/MCPPromptBuilder");
+    require("../../services/mcp/MCPPromptBuilder");
 
 (async () => {
 

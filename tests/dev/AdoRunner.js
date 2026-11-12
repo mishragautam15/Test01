@@ -1,5 +1,5 @@
 const AdoClient =
-    require('../services/ado/AdoClient');
+    require('../../services/ado/AdoClient');
 
 (async () => {
 
