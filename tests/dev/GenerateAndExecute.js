@@ -1,8 +1,8 @@
 const AutomationEngine =
-    require("../services/AutomationEngine");
+    require("../../services/AutomationEngine");
 
 const ConfigService =
-    require("../services/ConfigService");
+    require("../../services/ConfigService");
 
 (async () => {
 

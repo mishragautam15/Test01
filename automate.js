@@ -1,74 +1,106 @@
-const { execSync } =
-    require("child_process");
+const AutomationEngine =
+    require("./services/AutomationEngine");
 
-console.log(
-    "\n===================================="
-);
+const ConfigService =
+    require("./services/ConfigService");
 
-console.log(
-    "AI-Infused Playwright Automation"
-);
+(async () => {
 
-console.log(
-    "====================================\n"
-);
-
-try {
-
-    console.log(
-        "Step 1 : Generate Test Assets\n"
-    );
-
-    execSync(
-        "node tests/GenerateAndExecute.js",
-        {
-            stdio: "inherit"
-        }
-    );
-        
     console.log(
         "\n===================================="
     );
 
     console.log(
-        "READY TO EXECUTE"
+        "AI-Infused Playwright Automation"
     );
 
     console.log(
-        "===================================="
+        "====================================\n"
     );
 
-} catch (error) {
+    const configService =
+        new ConfigService();
+
+    const environment =
+        configService
+            .getEnvironment();
+
+    const testCaseId =
+        environment.testCaseId;
+
+    const engine =
+        new AutomationEngine();
+
+    const result =
+        await engine.generate(
+            testCaseId
+        );
 
     if (
-        error.status === 100
+        result.status ===
+        "VALIDATION_FAILED"
     ) {
 
         console.log(
-            "\nWorkflow paused waiting for MCP metadata."
+            `Test Case: ${result.testCaseId}`
         );
 
-        process.exit(0);
+        console.log(
+            "\nStatus: VALIDATION_FAILED\n"
+        );
+
+        result.errors.forEach(
+            error =>
+                console.log(
+                    `- ${error}`
+                )
+        );
+
+        return;
     }
 
     if (
-        error.status === 101
+        result.status ===
+        "WAITING_FOR_MCP"
     ) {
 
         console.log(
-            "\nWorkflow stopped due to validation errors."
+            `Test Case: ${result.testCaseId}`
         );
 
-        process.exit(0);
+        console.log(
+            `Title: ${result.title}`
+        );
+
+        console.log(
+            "\nStatus: WAITING_FOR_MCP\n"
+        );
+
+        console.log(
+            result.message
+        );
+
+        console.log(
+            `\nPrompt: ${result.promptPath}`
+        );
+
+        return;
     }
 
-    console.error(
-        "\nUnexpected framework error."
+    console.log(
+        `Test Case: ${testCaseId}`
     );
 
-    console.error(
-        error.message
+    console.log(
+        "\nStatus: READY_TO_EXECUTE\n"
     );
 
-    process.exit(1);
-}
+    console.log(
+        `Page Object: ${result.pageObjectPath}`
+    );
+
+    console.log(
+        `Spec: ${result.specPath}`
+    );
+
+})();
