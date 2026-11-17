@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "automate": "node automate.js"
+    "automate": "node automate.js",
+    "script":"npx.cmd playwright test generated/tests/TC78681_Verify_the_candidate_portal_homepage_when_logged_in_with_CT_user.spec.js --headed"
   },
   "keywords": [],
   "author": "",

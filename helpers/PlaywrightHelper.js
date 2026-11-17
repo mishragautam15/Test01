@@ -27,4 +27,4 @@ class PlaywrightHelper {
     }
 }
 
-module.exports = PlaywrightHelper;
+    module.exports = PlaywrightHelper;
